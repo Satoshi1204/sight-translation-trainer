@@ -6,34 +6,18 @@
 <title>Sight Translation Trainer</title>
 <style>
 :root {
-  --bg: #f5f4f0;
-  --surface: #ffffff;
-  --surface2: #eeece7;
-  --border: rgba(0,0,0,0.09);
-  --border-mid: rgba(0,0,0,0.16);
-  --text: #1a1917;
-  --text2: #6b6a66;
-  --text3: #9b9a96;
-  --blue: #2563eb;
-  --blue-dark: #1d4ed8;
-  --blue-bg: #e8f0fd;
-  --blue-border: #93c5fd;
-  --green: #16a34a;
-  --green-bg: #dcfce7;
-  --green-border: #86efac;
-  --red: #dc2626;
-  --red-bg: #fee2e2;
-  --red-border: #fca5a5;
-  --purple-bg: #ede9fe;
-  --purple: #7c3aed;
-  --r-md: 9px;
-  --r-lg: 14px;
-  --r-xl: 20px;
+  --bg: #f5f4f0; --surface: #ffffff; --surface2: #eeece7;
+  --border: rgba(0,0,0,0.09); --border-mid: rgba(0,0,0,0.16);
+  --text: #1a1917; --text2: #6b6a66; --text3: #9b9a96;
+  --blue: #2563eb; --blue-dark: #1d4ed8; --blue-bg: #e8f0fd; --blue-border: #93c5fd;
+  --green: #16a34a; --green-bg: #dcfce7; --green-border: #86efac;
+  --red: #dc2626; --red-bg: #fee2e2; --red-border: #fca5a5;
+  --purple-bg: #ede9fe; --purple: #7c3aed;
+  --r-md: 9px; --r-lg: 14px; --r-xl: 20px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-/* ═══ SETUP ═══ */
 #setupScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem 1rem; }
 .setup-card { background: var(--surface); border: 0.5px solid var(--border-mid); border-radius: var(--r-xl); padding: 2.5rem 2rem; width: 100%; max-width: 480px; }
 .setup-logo { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: 1.25rem; }
@@ -50,17 +34,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, 
 .file-drop.loaded p { color: var(--green); font-weight: 600; }
 
 .field-label { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--text2); margin-bottom: 5px; }
-.select-row { display: flex; gap: 8px; margin-bottom: 1rem; }
-.select-group { flex: 1; }
-.select-group.narrow { flex: 0 0 100px; }
 select { width: 100%; height: 38px; padding: 0 10px; border: 0.5px solid var(--border-mid); border-radius: var(--r-md); font-size: 14px; background: var(--surface); color: var(--text); cursor: pointer; }
 select:focus { outline: none; border-color: var(--blue); }
-
 .info-box { background: var(--surface2); border-radius: var(--r-md); padding: 10px 14px; font-size: 12px; color: var(--text2); margin-bottom: 1.5rem; line-height: 1.7; }
 .divider { border: none; border-top: 0.5px solid var(--border); margin: 1.25rem 0; }
 .eleven-row { display: flex; gap: 8px; margin-bottom: 5px; }
 .eleven-row input { flex: 1; height: 36px; padding: 0 10px; border: 0.5px solid var(--border-mid); border-radius: var(--r-md); font-size: 12px; font-family: monospace; background: var(--surface); color: var(--text); }
-.eleven-row input:focus { outline: none; border-color: var(--blue); }
 .eleven-note { font-size: 11px; color: var(--text3); margin-bottom: 1.5rem; }
 
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 16px; height: 38px; border: 0.5px solid var(--border-mid); border-radius: var(--r-md); background: var(--surface); color: var(--text); font-size: 14px; font-weight: 500; cursor: pointer; transition: background .15s, opacity .15s; white-space: nowrap; font-family: inherit; }
@@ -71,7 +50,7 @@ select:focus { outline: none; border-color: var(--blue); }
 .btn-primary:hover { background: var(--blue-dark); }
 .btn-start { width: 100%; height: 48px; font-size: 16px; border-radius: var(--r-lg); margin-top: .5rem; }
 
-/* ── lesson picker ── */
+/* lesson picker */
 .lesson-picker { margin-bottom: 1.25rem; }
 .lesson-picker-label { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--text2); margin-bottom: 8px; }
 .lesson-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
@@ -80,11 +59,9 @@ select:focus { outline: none; border-color: var(--blue); }
 .lesson-btn.selected { background: var(--blue); border-color: transparent; color: #fff; font-weight: 700; }
 .lesson-btn.all-btn { background: var(--surface2); color: var(--text2); }
 .lesson-btn.all-btn.selected { background: var(--blue); color: #fff; }
-.lesson-count-note { font-size: 11px; color: var(--text3); }
 
-/* ═══ APP ═══ */
+/* app */
 #appScreen { display: none; max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem 5rem; }
-
 .topbar { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 0.5px solid var(--border); gap: 12px; }
 .topbar-info h2 { font-size: 15px; font-weight: 700; }
 .topbar-info p { font-size: 12px; color: var(--text2); margin-top: 2px; }
@@ -92,46 +69,36 @@ select:focus { outline: none; border-color: var(--blue); }
 .progress-bar { width: 80px; height: 4px; background: var(--border-mid); border-radius: 2px; }
 .progress-fill { height: 4px; background: var(--blue); border-radius: 2px; transition: width .4s; }
 .progress-num { font-size: 12px; color: var(--text2); min-width: 32px; text-align: right; }
-
 .step-dots { display: flex; gap: 4px; margin-bottom: 1.25rem; flex-wrap: wrap; }
 .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border-mid); }
 .dot.done { background: var(--green); }
 .dot.active { background: var(--blue); }
-
 .phase-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 14px; letter-spacing: .04em; text-transform: uppercase; }
 .phase-think  { background: var(--blue-bg); color: var(--blue); }
 .phase-answer { background: var(--purple-bg); color: var(--purple); }
-
 .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--r-lg); padding: 1.5rem; margin-bottom: 1rem; }
 .card-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 1.25rem; flex-wrap: wrap; }
 .tag { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 20px; }
 .tag-lesson  { background: var(--surface2); color: var(--text2); }
 .tag-speaker { background: var(--blue-bg); color: var(--blue); }
 
-/* ── スラッシュ区切り日本語センテンス ── */
-.ja-sentence-box { background: var(--surface2); border-radius: var(--r-lg); padding: 1.75rem 1.5rem; margin-bottom: 1.25rem; }
+/* ja sentence */
+.ja-sentence-box { background: var(--surface2); border-radius: var(--r-lg); padding: 1.75rem 1.5rem; margin-bottom: 1rem; }
 .ja-sentence { font-size: 20px; font-weight: 500; line-height: 1.9; color: var(--text); letter-spacing: .01em; }
 .ja-slash { color: #aaa; font-weight: 300; margin: 0 4px; font-size: 18px; }
-.tts-row { display: flex; gap: 8px; align-items: center; margin-top: 14px; flex-wrap: wrap; }
-.tts-ja-btn { height: 34px; padding: 0 14px; font-size: 13px; gap: 5px; }
-.tts-ja-btn.playing { background: var(--blue-bg) !important; border-color: var(--blue-border) !important; color: var(--blue) !important; }
-.tts-note { font-size: 11px; color: var(--text3); }
 
-/* ── audio player ── */
-.audio-player { background: var(--surface2); border: 0.5px solid var(--border-mid); border-radius: var(--r-lg); padding: 10px 14px; margin-top: 12px; }
-.audio-player-row { display: flex; align-items: center; gap: 8px; }
-.play-stop-btn { height: 36px; padding: 0 14px; font-size: 13px; gap: 6px; flex-shrink: 0; }
-.play-stop-btn.playing { background: var(--red-bg) !important; border-color: var(--red-border) !important; color: var(--red) !important; }
+/* ★ audio player UI ★ */
+.player-box { background: var(--surface); border: 0.5px solid var(--border-mid); border-radius: var(--r-lg); padding: 10px 14px; margin-top: 10px; }
+.player-row { display: flex; align-items: center; gap: 8px; }
+.play-btn { height: 36px; padding: 0 14px; font-size: 13px; gap: 6px; flex-shrink: 0; min-width: 90px; }
+.play-btn.is-playing { background: var(--red-bg) !important; border-color: var(--red-border) !important; color: var(--red) !important; }
 .slider-wrap { flex: 1; display: flex; align-items: center; gap: 6px; min-width: 0; }
-.slider-wrap input[type=range] { flex: 1; height: 4px; accent-color: var(--blue); cursor: pointer; }
-.slider-time { font-size: 11px; color: var(--text3); min-width: 28px; text-align: right; flex-shrink: 0; }
-.speed-select { height: 28px; font-size: 12px; padding: 0 4px; border: 0.5px solid var(--border-mid); border-radius: 5px; background: var(--surface); color: var(--text2); flex-shrink: 0; }
-.tts-controls { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.tts-ctrl-btn { height: 32px; padding: 0 11px; font-size: 12px; gap: 4px; color: var(--text2); }
-.tts-ctrl-btn:disabled { opacity: .3; cursor: not-allowed; }
-.tts-ctrl-btn.active { background: var(--blue-bg) !important; border-color: var(--blue-border) !important; color: var(--blue) !important; }
+.slider-wrap input[type=range] { flex: 1; height: 4px; accent-color: var(--blue); cursor: pointer; min-width: 0; }
+.slider-pct { font-size: 11px; color: var(--text3); min-width: 30px; text-align: right; flex-shrink: 0; }
+.speed-sel { height: 28px; font-size: 12px; padding: 0 4px; border: 0.5px solid var(--border-mid); border-radius: 5px; background: var(--surface); color: var(--text2); cursor: pointer; flex-shrink: 0; }
+.player-note { font-size: 11px; color: var(--text3); margin-top: 6px; }
 
-/* ── 正解チャンク対比表示 ── */
+/* answer */
 .chunk-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
 .chunk-table tr { border-bottom: 0.5px solid var(--border); }
 .chunk-table tr:last-child { border-bottom: none; }
@@ -139,43 +106,37 @@ select:focus { outline: none; border-color: var(--blue); }
 .chunk-table .num-col { width: 28px; color: var(--text3); font-size: 11px; font-weight: 700; text-align: center; padding-top: 12px; }
 .chunk-table .ja-col { color: var(--text2); border-right: 0.5px solid var(--border); width: 48%; }
 .chunk-table .en-col { font-weight: 500; color: var(--text); width: 48%; }
-
 .full-en-box { background: var(--surface2); border-radius: var(--r-md); padding: 1rem 1.25rem; margin-bottom: 1rem; }
 .full-en-label { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
 .full-en-text { font-size: 16px; font-weight: 600; line-height: 1.7; color: var(--text); letter-spacing: -.01em; }
 
-.play-en-btn { height: 34px; padding: 0 14px; font-size: 13px; gap: 5px; margin-bottom: 1rem; }
-.play-en-btn.playing { background: var(--blue-bg) !important; border-color: var(--blue-border) !important; color: var(--blue) !important; }
-
-/* 自己採点 */
-.judge-section { margin-top: .5rem; }
+/* judge */
+.judge-section { margin-top: .75rem; }
 .judge-label { font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 8px; }
 .judge-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .judge-ok { height: 54px; font-size: 16px; font-weight: 700; border-radius: var(--r-lg); background: var(--green-bg); border: 1.5px solid var(--green-border); color: var(--green); }
 .judge-ok:hover { background: #bbf7d0 !important; }
 .judge-ng { height: 54px; font-size: 16px; font-weight: 700; border-radius: var(--r-lg); background: var(--red-bg); border: 1.5px solid var(--red-border); color: var(--red); }
 .judge-ng:hover { background: #fecaca !important; }
-
 .result-flash { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: var(--r-md); margin-bottom: 1rem; font-weight: 600; font-size: 14px; }
 .result-flash.ok { background: var(--green-bg); border: 0.5px solid var(--green-border); color: var(--green); }
 .result-flash.ng { background: var(--red-bg); border: 0.5px solid var(--red-border); color: var(--red); }
-
 .nav-row { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
 
 /* end */
 .end-wrap { text-align: center; padding: 2rem 1rem; }
-.end-wrap h3 { font-size: 22px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 8px; }
+.end-wrap h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
 .end-wrap .sub { font-size: 14px; color: var(--text2); margin-bottom: 2rem; line-height: 1.6; }
 .score-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 2rem; }
 .score-card { background: var(--surface2); border-radius: var(--r-lg); padding: 14px 8px; }
-.score-num { font-size: 26px; font-weight: 700; letter-spacing: -.02em; }
+.score-num { font-size: 26px; font-weight: 700; }
 .score-lbl { font-size: 11px; color: var(--text2); margin-top: 3px; }
 .end-btns { display: flex; gap: 8px; justify-content: center; }
 </style>
 </head>
 <body>
 
-<!-- ═══ SETUP ═══ -->
+<!-- SETUP -->
 <div id="setupScreen">
   <div class="setup-card">
     <div class="setup-logo">Sight Translation Trainer</div>
@@ -194,18 +155,15 @@ select:focus { outline: none; border-color: var(--blue); }
       <div class="lesson-picker">
         <div class="lesson-picker-label">練習するレッスンを選択</div>
         <div class="lesson-grid" id="lessonGrid"></div>
-        <div class="lesson-count-note" id="lessonNote"></div>
       </div>
-      <div style="display:flex;gap:8px;margin-bottom:1rem;align-items:flex-end">
-        <div style="flex:1">
-          <div class="field-label" style="margin-bottom:5px">出題数</div>
-          <select id="countSel" onchange="updateInfo()">
-            <option value="3">3問</option>
-            <option value="5" selected>5問</option>
-            <option value="10">10問</option>
-            <option value="all">全問</option>
-          </select>
-        </div>
+      <div style="margin-bottom:1rem">
+        <div class="field-label" style="margin-bottom:5px">出題数</div>
+        <select id="countSel" onchange="updateInfo()">
+          <option value="3">3問</option>
+          <option value="5" selected>5問</option>
+          <option value="10">10問</option>
+          <option value="all">全問</option>
+        </select>
       </div>
       <div class="info-box" id="infoBox"></div>
     </div>
@@ -216,7 +174,7 @@ select:focus { outline: none; border-color: var(--blue); }
       <input type="password" id="elevenInput" placeholder="未入力の場合 Web Speech API を使用" autocomplete="off">
       <button class="btn" onclick="saveEleven()">保存</button>
     </div>
-    <div class="eleven-note" id="elevenStatus">未設定 — Web Speech API（無料）で英語を読み上げます</div>
+    <div class="eleven-note" id="elevenStatus">未設定 — Web Speech API で英語を読み上げます</div>
 
     <button class="btn btn-primary btn-start" id="startBtn" onclick="startSession()" disabled>
       学習開始 →
@@ -224,7 +182,7 @@ select:focus { outline: none; border-color: var(--blue); }
   </div>
 </div>
 
-<!-- ═══ APP ═══ -->
+<!-- APP -->
 <div id="appScreen">
   <div class="topbar">
     <div class="topbar-info">
@@ -240,32 +198,22 @@ select:focus { outline: none; border-color: var(--blue); }
 </div>
 
 <script>
-// ══ STATE ══
-let jsonData     = null;
-let sessionItems = [];   // [{lessonName, speaker, chunks:[{en,ja}]}]
-let idx          = 0;
-let scores       = {correct:0, wrong:0, skip:0};
+// ══ DATA ══
+let jsonData = null, sessionItems = [], idx = 0;
+let selectedLesson = 'all';
+let scores = {correct:0, wrong:0, skip:0};
 
 // ══ FILE LOAD ══
 document.getElementById('fileInput').addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
+  const file = e.target.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
     try {
       const parsed = JSON.parse(ev.target.result);
-      let lessons;
-      if (parsed && parsed.lessons && Array.isArray(parsed.lessons)) {
-        lessons = parsed.lessons;
-      } else if (Array.isArray(parsed)) {
-        lessons = parsed;
-      } else {
-        throw new Error('JSONの形式が認識できません。\nトップレベルキー: ' + Object.keys(parsed).join(', '));
-      }
-      if (!lessons.length) throw new Error('レッスンデータが空です');
-      const f = lessons[0];
-      if (!f.lesson || !f.dialogue) throw new Error('"lesson" と "dialogue" キーが必要です');
-
+      let lessons = parsed.lessons && Array.isArray(parsed.lessons) ? parsed.lessons
+                  : Array.isArray(parsed) ? parsed : null;
+      if (!lessons || !lessons.length) throw new Error('レッスンデータが見つかりません');
+      if (!lessons[0].lesson || !lessons[0].dialogue) throw new Error('"lesson"/"dialogue" キーが必要です');
       jsonData = lessons;
       buildLessonSelect();
       document.getElementById('afterLoad').style.display = 'block';
@@ -274,72 +222,50 @@ document.getElementById('fileInput').addEventListener('change', e => {
       dz.classList.add('loaded');
       dz.querySelector('p').textContent = `✓ ${file.name}  読み込み完了`;
       dz.querySelector('p:last-child').textContent = `${jsonData.length} レッスン`;
-    } catch(err) { alert('JSONの読み込みに失敗しました:\n' + err.message); }
+    } catch(err) { alert('読み込み失敗:\n' + err.message); }
   };
   reader.readAsText(file);
 });
 
-let selectedLesson = 'all';   // 'all' または 'L1' などのレッスン名
-
 function buildLessonSelect() {
-  const grid = document.getElementById('lessonGrid');
-  grid.innerHTML = '';
+  const grid = document.getElementById('lessonGrid'); grid.innerHTML = '';
   selectedLesson = 'all';
-
-  // 「全レッスン」ボタン
   const allBtn = document.createElement('button');
   allBtn.className = 'lesson-btn all-btn selected';
-  allBtn.textContent = '全レッスン';
-  allBtn.dataset.lesson = 'all';
-  allBtn.onclick = () => selectLesson('all');
-  grid.appendChild(allBtn);
-
-  // 各レッスンボタン
+  allBtn.textContent = '全レッスン'; allBtn.dataset.lesson = 'all';
+  allBtn.onclick = () => selectLesson('all'); grid.appendChild(allBtn);
   jsonData.forEach(l => {
     const btn = document.createElement('button');
-    btn.className = 'lesson-btn';
-    btn.textContent = l.lesson;
-    btn.title = `${l.dialogue.length}発話`;
-    btn.dataset.lesson = l.lesson;
-    btn.onclick = () => selectLesson(l.lesson);
+    btn.className = 'lesson-btn'; btn.textContent = l.lesson;
+    btn.dataset.lesson = l.lesson; btn.onclick = () => selectLesson(l.lesson);
     grid.appendChild(btn);
   });
   updateInfo();
 }
-
 function selectLesson(lesson) {
   selectedLesson = lesson;
-  // ボタンのselectスタイルを更新
-  document.querySelectorAll('#lessonGrid .lesson-btn').forEach(btn => {
-    btn.classList.toggle('selected', btn.dataset.lesson === lesson);
-  });
+  document.querySelectorAll('#lessonGrid .lesson-btn').forEach(b =>
+    b.classList.toggle('selected', b.dataset.lesson === lesson));
   updateInfo();
 }
-
 function updateInfo() {
   const items = getSessionItems();
   const cv = document.getElementById('countSel').value;
   const show = cv === 'all' ? items.length : Math.min(parseInt(cv), items.length);
   document.getElementById('infoBox').innerHTML =
-    `対象発話数: <strong>${items.length}</strong> &nbsp;→&nbsp; 今回: <strong>${show}問</strong>`;
+    `対象発話数: <strong>${items.length}</strong> → 今回: <strong>${show}問</strong>`;
 }
-
 function getSessionItems() {
   if (!jsonData) return [];
   let out = [];
-  if (selectedLesson === 'all') {
-    jsonData.forEach(l => l.dialogue.forEach(d => out.push({lessonName: l.lesson, ...d})));
-  } else {
-    const l = jsonData.find(l => l.lesson === selectedLesson);
-    if (l) l.dialogue.forEach(d => out.push({lessonName: l.lesson, ...d}));
-  }
+  if (selectedLesson === 'all') jsonData.forEach(l => l.dialogue.forEach(d => out.push({lessonName:l.lesson,...d})));
+  else { const l = jsonData.find(l => l.lesson === selectedLesson); if(l) l.dialogue.forEach(d => out.push({lessonName:l.lesson,...d})); }
   return out;
 }
 
 // ══ ELEVENLABS ══
 function saveEleven() {
-  const v = document.getElementById('elevenInput').value.trim();
-  if (!v) return;
+  const v = document.getElementById('elevenInput').value.trim(); if(!v) return;
   sessionStorage.setItem('elKey', v);
   document.getElementById('elevenStatus').textContent = '✓ 保存済み（ElevenLabs有効）';
 }
@@ -350,10 +276,7 @@ function startSession() {
   let items = getSessionItems();
   const cv = document.getElementById('countSel').value;
   if (cv !== 'all') items = items.slice(0, parseInt(cv));
-  sessionItems = items;
-  idx = 0;
-  scores = {correct:0, wrong:0, skip:0};
-
+  sessionItems = items; idx = 0; scores = {correct:0,wrong:0,skip:0};
   document.getElementById('appTitle').textContent = selectedLesson === 'all' ? '全レッスン' : selectedLesson;
   document.getElementById('appSub').textContent = `${items.length}問 — 自己採点モード`;
   document.getElementById('setupScreen').style.display = 'none';
@@ -370,23 +293,21 @@ function updateProgress() {
 function dotsHTML() {
   const max = Math.min(sessionItems.length, 24);
   return '<div class="step-dots">' +
-    Array.from({length: max}, (_, i) =>
-      `<div class="dot ${i < idx ? 'done' : i === idx ? 'active' : ''}"></div>`
-    ).join('') + '</div>';
+    Array.from({length:max},(_,i)=>`<div class="dot ${i<idx?'done':i===idx?'active':''}"></div>`).join('')+'</div>';
 }
 
 // ══ RENDER ══
 function render() {
   if (idx >= sessionItems.length) { renderEnd(); return; }
-  updateProgress();
+  updateProgress(); stopSpeech();
   renderThink(sessionItems[idx]);
 }
 
 // ══ PHASE 1: THINK ══
-// スラッシュ区切りの全日本語センテンスを1画面で表示
 function renderThink(item) {
-  const jaFull = item.chunks.map(c => c.ja).join('<span class="ja-slash">/</span>');
-  const jaPlain = item.chunks.map(c => c.ja).join(' / ');  // TTS用プレーンテキスト
+  const jaFull  = item.chunks.map(c => c.ja).join('<span class="ja-slash">/</span>');
+  const jaPlain = item.chunks.map(c => c.ja).join(' / ');
+  _jaText = jaPlain;
 
   document.getElementById('screen').innerHTML = `
     ${dotsHTML()}
@@ -399,16 +320,27 @@ function renderThink(item) {
         <span class="tag tag-lesson">${esc(item.lessonName)}</span>
         ${item.speaker ? `<span class="tag tag-speaker">${esc(item.speaker)}</span>` : ''}
       </div>
-
       <div class="ja-sentence-box">
         <div class="ja-sentence">${jaFull}</div>
-        <div class="tts-row">
-          <button class="btn tts-ja-btn" id="ttsJaBtn" onclick="speakJa('${escA(jaPlain)}')">
-            <svg width="11" height="11" viewBox="0 0 11 11"><polygon points="1,1 10,5.5 1,10" fill="currentColor"/></svg>
-            日本語を読み上げる
-          </button>
-          <span class="tts-note">スラッシュごとに区切って英語に変換してください</span>
+        <div class="player-box">
+          <div class="player-row">
+            <button class="btn play-btn" id="jaBtn" onclick="jaToggle()">
+              ▶ 再生
+            </button>
+            <div class="slider-wrap">
+              <input type="range" id="jaSlider" min="0" max="100" value="0"
+                oninput="jaSliderMove(this.value)" onchange="jaSliderSet(this.value)">
+              <span class="slider-pct" id="jaPct">0%</span>
+            </div>
+            <select class="speed-sel" id="jaSpeedSel" onchange="jaSetSpeed(this.value)">
+              <option value="0.7">0.7x</option>
+              <option value="0.85">0.85x</option>
+              <option value="1.0" selected>1.0x</option>
+              <option value="1.2">1.2x</option>
+            </select>
+          </div>
         </div>
+        <div class="player-note">スラッシュごとに区切って英語に変換してください</div>
       </div>
     </div>
     <div class="nav-row">
@@ -417,26 +349,20 @@ function renderThink(item) {
         正解を見る →
       </button>
     </div>`;
-
-  // 自動再生なし
 }
 
 // ══ PHASE 2: ANSWER ══
-// チャンクごとに日本語 | 英語を対比表示 + 全文英語 + 音声 + 自己採点
 function showAnswer() {
   stopSpeech();
   const item = sessionItems[idx];
-
-  // チャンク対比テーブル
-  const tableRows = item.chunks.map((c, i) => `
+  const tableRows = item.chunks.map((c,i)=>`
     <tr>
-      <td class="num-col">${i + 1}</td>
+      <td class="num-col">${i+1}</td>
       <td class="ja-col">${esc(c.ja)}</td>
       <td class="en-col">${esc(c.en)}</td>
     </tr>`).join('');
-
-  // 全文英語（チャンクを結合）
-  const fullEn = item.chunks.map(c => c.en).join(' ');
+  const fullEn = item.chunks.map(c=>c.en).join(' ');
+  _enText = fullEn;
 
   document.getElementById('screen').innerHTML = `
     ${dotsHTML()}
@@ -446,7 +372,6 @@ function showAnswer() {
         <span class="tag tag-lesson">${esc(item.lessonName)}</span>
         ${item.speaker ? `<span class="tag tag-speaker">${esc(item.speaker)}</span>` : ''}
       </div>
-
       <table class="chunk-table">
         <thead>
           <tr style="background:var(--surface2)">
@@ -457,19 +382,30 @@ function showAnswer() {
         </thead>
         <tbody>${tableRows}</tbody>
       </table>
-
       <div class="full-en-box">
         <div class="full-en-label">フルセンテンス</div>
         <div class="full-en-text">${esc(fullEn)}</div>
       </div>
-
-      <button class="btn play-en-btn" id="playEnBtn" onclick="playEnglish('${escA(fullEn)}')">
-        <svg width="11" height="11" viewBox="0 0 11 11"><polygon points="1,1 10,5.5 1,10" fill="currentColor"/></svg>
-        ネイティブ発音で聞く
-      </button>
-
+      <div class="player-box">
+        <div class="player-row">
+          <button class="btn play-btn" id="enBtn" onclick="enToggle()">
+            ▶ ネイティブ発音
+          </button>
+          <div class="slider-wrap">
+            <input type="range" id="enSlider" min="0" max="100" value="0"
+              oninput="enSliderMove(this.value)" onchange="enSliderSet(this.value)">
+            <span class="slider-pct" id="enPct">0%</span>
+          </div>
+          <select class="speed-sel" id="enSpeedSel" onchange="enSetSpeed(this.value)">
+            <option value="0.7">0.7x</option>
+            <option value="0.85">0.85x</option>
+            <option value="1.0" selected>1.0x</option>
+            <option value="1.2">1.2x</option>
+          </select>
+        </div>
+      </div>
       <div class="judge-section">
-        <div class="judge-label">自己採点</div>
+        <div class="judge-label" style="margin-top:12px">自己採点</div>
         <div class="judge-row">
           <button class="btn judge-ok" onclick="doJudge(true)">○ &nbsp;言えた</button>
           <button class="btn judge-ng" onclick="doJudge(false)">× &nbsp;言えなかった</button>
@@ -479,195 +415,103 @@ function showAnswer() {
     <div class="nav-row">
       <button class="btn" onclick="render()">← もう一度見る</button>
     </div>`;
-
-  // 自動再生なし - ユーザーが再生ボタンを押す
-  _enCurrentText = fullEn;
-  _enStartPct = 0;
 }
 
 // ══ JUDGE ══
 function doJudge(correct) {
   if (correct) scores.correct++; else scores.wrong++;
-  document.querySelectorAll('.judge-ok, .judge-ng').forEach(b => b.disabled = true);
-
+  document.querySelectorAll('.judge-ok,.judge-ng').forEach(b=>b.disabled=true);
   const flash = document.createElement('div');
-  flash.className = 'result-flash ' + (correct ? 'ok' : 'ng');
-  flash.innerHTML = `<span style="font-size:18px">${correct ? '🎉' : '💪'}</span>
-    <span>${correct ? '言えた！次へ進みましょう' : 'もう一度確認して次へ'}</span>`;
+  flash.className = 'result-flash ' + (correct?'ok':'ng');
+  flash.innerHTML = `<span style="font-size:18px">${correct?'🎉':'💪'}</span>
+    <span>${correct?'言えた！次へ進みましょう':'もう一度確認して次へ'}</span>`;
   const js = document.querySelector('.judge-section');
   if (js) js.parentNode.insertBefore(flash, js);
-
   setTimeout(() => { stopSpeech(); idx++; render(); }, 1000);
 }
-
-function doSkip() {
-  stopSpeech();
-  scores.skip++;
-  idx++;
-  render();
-}
+function doSkip() { stopSpeech(); scores.skip++; idx++; render(); }
 
 // ══ TTS ENGINE ══
-// Chrome の Web Speech API は pause/resume が壊れているため使用しない。
-// 「開始位置 = テキストの文字数 %」でサブストリング再生を実現する。
+// Chrome の Web Speech API は pause()/resume() が動作しない既知バグがある。
+// そのため「再生 / 停止」の2状態のみ。停止位置はスライダーで手動指定。
 
-let _jaCurrentText = '';
-let _jaStartPct    = 0;      // 0〜100 スライダー値
-let _jaPlaying     = false;
-let _jaUtt         = null;
-let _jaSpeed       = 1.0;
+let _jaText = '', _jaPlaying = false, _jaSpeed = 1.0, _jaStartPct = 0;
+let _enText = '', _enPlaying = false, _enSpeed = 1.0, _enStartPct = 0;
+let _enAudio = null, _enDuration = 0;
 
-let _enCurrentText = '';
-let _enStartPct    = 0;
-let _enPlaying     = false;
-let _enUtt         = null;
-let _enAudio       = null;   // ElevenLabs Audio
-let _enSpeed       = 1.0;
-let _enDuration    = 0;      // ElevenLabs 総再生時間(秒)
+// ── 日本語 ──
+function jaToggle() { _jaPlaying ? jaStop() : jaStart(); }
 
-const ICON_PLAY = '<svg width="11" height="11" viewBox="0 0 11 11"><polygon points="1,1 10,5.5 1,10" fill="currentColor"/></svg>';
-const ICON_STOP = '<svg width="11" height="11" viewBox="0 0 11 11"><rect x="2" y="1" width="3" height="9" rx="1" fill="currentColor"/><rect x="7" y="1" width="3" height="9" rx="1" fill="currentColor"/></svg>';
-
-// ─────────────────────────────────────────────
-// 日本語TTS
-// ─────────────────────────────────────────────
-function _jaSubText(pct) {
-  // pct=0 → 全文、pct=50 → 後半から
-  const text = _jaCurrentText;
-  if (pct <= 0) return text;
-  const startChar = Math.floor(text.length * pct / 100);
-  // スラッシュの直後まで進める（自然な区切りから再生）
-  const nextSlash = text.indexOf('/', startChar);
-  const start = (nextSlash > 0 && nextSlash < startChar + 20) ? nextSlash + 1 : startChar;
-  return text.slice(start).trim();
-}
-
-function jaToggle() {
-  if (_jaPlaying) { jaStop(); }
-  else            { jaPlay(); }
-}
-
-function jaPlay() {
-  const text = _jaSubText(_jaStartPct);
+function jaStart() {
+  const text = _jaTextFrom(_jaStartPct);
   if (!text) return;
-  jaStop();   // 既存をキャンセル
+  window.speechSynthesis.cancel();
   _jaPlaying = true;
-  _jaSetBtn(true);
+  _jaBtnState(true);
 
   const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = 'ja-JP';
-  utt.rate = _jaSpeed;
-  _jaUtt = utt;
-
-  let sliderTimer = null;
-  const totalLen = _jaCurrentText.length;
+  utt.lang = 'ja-JP'; utt.rate = _jaSpeed;
+  const totalLen = _jaText.length;
   const startLen = Math.floor(totalLen * _jaStartPct / 100);
-  let charDone = startLen;
-
-  utt.onboundary = (e) => {
+  utt.onboundary = e => {
     if (e.name !== 'word') return;
-    charDone = startLen + e.charIndex;
-    const pct = Math.min(100, Math.round(charDone / totalLen * 100));
+    const pct = Math.min(100, Math.round((startLen + e.charIndex) / totalLen * 100));
     _jaSetSlider(pct);
   };
-  utt.onend = () => {
-    _jaPlaying = false;
-    _jaStartPct = 0;
-    _jaSetBtn(false);
-    _jaSetSlider(0);
-  };
-  utt.onerror = (e) => {
-    if (e.error === 'interrupted' || e.error === 'canceled') return; // 正常停止
-    _jaPlaying = false;
-    _jaSetBtn(false);
-  };
+  utt.onend   = () => { _jaPlaying = false; _jaBtnState(false); _jaStartPct = 0; _jaSetSlider(0); };
+  utt.onerror = e  => { if (e.error==='interrupted'||e.error==='canceled') return; _jaPlaying=false; _jaBtnState(false); };
   window.speechSynthesis.speak(utt);
 }
 
 function jaStop() {
   window.speechSynthesis.cancel();
-  _jaPlaying = false;
-  _jaUtt = null;
-  _jaSetBtn(false);
+  _jaPlaying = false; _jaBtnState(false);
 }
 
-function _jaSetBtn(playing) {
-  const btn = document.getElementById('jaPlayBtn');
-  if (!btn) return;
-  if (playing) {
-    btn.innerHTML = ICON_STOP + ' 停止';
-    btn.classList.add('playing');
-  } else {
-    btn.innerHTML = ICON_PLAY + ' 再生';
-    btn.classList.remove('playing');
-  }
+function _jaTextFrom(pct) {
+  if (pct <= 0) return _jaText;
+  const sc = Math.floor(_jaText.length * pct / 100);
+  const ni = _jaText.indexOf('/', sc);
+  return _jaText.slice((ni>0&&ni<sc+20)?ni+1:sc).trim();
+}
+function _jaBtnState(playing) {
+  const btn = document.getElementById('jaBtn'); if (!btn) return;
+  btn.textContent = playing ? '■ 停止' : '▶ 再生';
+  btn.classList.toggle('is-playing', playing);
 }
 function _jaSetSlider(pct) {
-  const s = document.getElementById('jaSlider');
-  const l = document.getElementById('jaSliderLabel');
-  if (s) s.value = pct;
-  if (l) l.textContent = pct + '%';
+  const s = document.getElementById('jaSlider'); if(s) s.value = pct;
+  const p = document.getElementById('jaPct');    if(p) p.textContent = pct + '%';
 }
-function jaSliderInput(val) {
-  _jaStartPct = parseInt(val);
-  document.getElementById('jaSliderLabel').textContent = val + '%';
-}
-function jaSliderChange(val) {
-  _jaStartPct = parseInt(val);
-  if (_jaPlaying) { jaStop(); jaPlay(); }
-}
-function jaSpeedChange(val) {
-  _jaSpeed = parseFloat(val);
-  if (_jaPlaying) { jaStop(); jaPlay(); }
-}
+function jaSliderMove(v) { _jaStartPct = parseInt(v); const p=document.getElementById('jaPct'); if(p) p.textContent=v+'%'; }
+function jaSliderSet(v)  { _jaStartPct = parseInt(v); if (_jaPlaying) { jaStop(); jaStart(); } }
+function jaSetSpeed(v)   { _jaSpeed = parseFloat(v); if (_jaPlaying) { jaStop(); jaStart(); } }
 
-// ─────────────────────────────────────────────
-// 英語TTS
-// ─────────────────────────────────────────────
-function _enSubText(pct) {
-  const text = _enCurrentText;
-  if (pct <= 0) return text;
-  const startChar = Math.floor(text.length * pct / 100);
-  // スペースの手前まで巻き戻して単語境界から開始
-  let s = startChar;
-  while (s > 0 && text[s] !== ' ') s--;
-  return text.slice(s).trim();
-}
+// ── 英語 ──
+function enToggle() { _enPlaying ? enStop() : enStart(); }
 
-function enToggle() {
-  if (_enPlaying) { enStop(); }
-  else            { enPlay(); }
-}
-
-async function enPlay() {
-  const text = _enSubText(_enStartPct);
-  if (!text) return;
+async function enStart() {
+  if (!_enText) return;
   enStop();
-  _enPlaying = true;
-  _enSetBtn(true);
-
+  _enPlaying = true; _enBtnState(true);
   const elKey = getElKey();
+
   if (elKey) {
-    // ElevenLabs: Audio要素なので currentTime でシーク可能
     try {
       const res = await fetch('https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB', {
-        method: 'POST',
-        headers: { 'xi-api-key': elKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: _enCurrentText, model_id: 'eleven_turbo_v2_5',
-          voice_settings: { stability:.5, similarity_boost:.8, style:.3, use_speaker_boost:true } })
+        method:'POST',
+        headers:{'xi-api-key':elKey,'Content-Type':'application/json'},
+        body:JSON.stringify({text:_enText,model_id:'eleven_turbo_v2_5',
+          voice_settings:{stability:.5,similarity_boost:.8,style:.3,use_speaker_boost:true}})
       });
       if (!res.ok) throw new Error(res.status);
       const url = URL.createObjectURL(await res.blob());
       const audio = new Audio(url);
       audio.playbackRate = _enSpeed;
       _enAudio = audio;
-
       audio.addEventListener('loadedmetadata', () => {
         _enDuration = audio.duration;
-        // スタート位置をシーク
-        if (_enStartPct > 0) {
-          audio.currentTime = audio.duration * _enStartPct / 100;
-        }
+        if (_enStartPct > 0) audio.currentTime = audio.duration * _enStartPct / 100;
         audio.play();
       });
       audio.ontimeupdate = () => {
@@ -675,168 +519,102 @@ async function enPlay() {
         const pct = Math.min(100, Math.round(audio.currentTime / _enDuration * 100));
         _enSetSlider(pct);
       };
-      audio.onended = () => {
-        URL.revokeObjectURL(url);
-        _enAudio = null;
-        _enPlaying = false;
-        _enStartPct = 0;
-        _enSetBtn(false);
-        _enSetSlider(0);
-      };
-      audio.onerror = () => {
-        URL.revokeObjectURL(url);
-        _enAudio = null;
-        _enPlaying = false;
-        _enSetBtn(false);
-      };
+      audio.onended = () => { URL.revokeObjectURL(url); _enAudio=null; _enPlaying=false; _enBtnState(false); _enStartPct=0; _enSetSlider(0); };
+      audio.onerror = () => { URL.revokeObjectURL(url); _enAudio=null; _enPlaying=false; _enBtnState(false); };
       return;
-    } catch(err) {
-      console.warn('ElevenLabs err:', err);
-      _enAudio = null;
-      // fallthrough
-    }
+    } catch(err) { console.warn('ElevenLabs err:', err); _enAudio=null; }
   }
 
-  // Web Speech fallback（位置指定はサブテキストで近似）
-  const text2 = _enSubText(_enStartPct);
-  const utt = new SpeechSynthesisUtterance(text2);
-  utt.lang = 'en-US';
-  utt.rate = _enSpeed;
-  _enUtt = utt;
-
-  const totalLen = _enCurrentText.length;
+  // Web Speech fallback
+  const text = _enTextFrom(_enStartPct);
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'en-US'; utt.rate = _enSpeed;
+  const totalLen = _enText.length;
   const startLen = Math.floor(totalLen * _enStartPct / 100);
-
-  utt.onboundary = (e) => {
+  utt.onboundary = e => {
     if (e.name !== 'word') return;
-    const charDone = startLen + e.charIndex;
-    const pct = Math.min(100, Math.round(charDone / totalLen * 100));
+    const pct = Math.min(100, Math.round((startLen + e.charIndex) / totalLen * 100));
     _enSetSlider(pct);
   };
-  utt.onend = () => {
-    _enPlaying = false;
-    _enStartPct = 0;
-    _enSetBtn(false);
-    _enSetSlider(0);
-  };
-  utt.onerror = (e) => {
-    if (e.error === 'interrupted' || e.error === 'canceled') return;
-    _enPlaying = false;
-    _enSetBtn(false);
-  };
+  utt.onend   = () => { _enPlaying=false; _enBtnState(false); _enStartPct=0; _enSetSlider(0); };
+  utt.onerror = e  => { if(e.error==='interrupted'||e.error==='canceled') return; _enPlaying=false; _enBtnState(false); };
   window.speechSynthesis.speak(utt);
 }
 
 function enStop() {
-  if (_enAudio) { _enAudio.pause(); _enStartPct = Math.round(_enAudio.currentTime / (_enDuration||1) * 100); _enAudio = null; }
+  if (_enAudio) {
+    _enStartPct = Math.round(_enAudio.currentTime / (_enDuration||1) * 100);
+    _enAudio.pause(); _enAudio = null;
+  }
   window.speechSynthesis.cancel();
-  _enPlaying = false;
-  _enUtt = null;
-  _enSetBtn(false);
+  _enPlaying = false; _enBtnState(false);
 }
 
-function _enSetBtn(playing) {
-  const btn = document.getElementById('enPlayBtn');
-  if (!btn) return;
-  if (playing) {
-    btn.innerHTML = ICON_STOP + ' 停止';
-    btn.classList.add('playing');
-  } else {
-    btn.innerHTML = ICON_PLAY + ' ネイティブ発音';
-    btn.classList.remove('playing');
-  }
+function _enTextFrom(pct) {
+  if (pct <= 0) return _enText;
+  let s = Math.floor(_enText.length * pct / 100);
+  while (s > 0 && _enText[s] !== ' ') s--;
+  return _enText.slice(s).trim();
+}
+function _enBtnState(playing) {
+  const btn = document.getElementById('enBtn'); if (!btn) return;
+  btn.textContent = playing ? '■ 停止' : '▶ ネイティブ発音';
+  btn.classList.toggle('is-playing', playing);
 }
 function _enSetSlider(pct) {
-  const s = document.getElementById('enSlider');
-  const l = document.getElementById('enSliderLabel');
-  if (s) s.value = pct;
-  if (l) l.textContent = pct + '%';
+  const s = document.getElementById('enSlider'); if(s) s.value = pct;
+  const p = document.getElementById('enPct');    if(p) p.textContent = pct + '%';
 }
-function enSliderInput(val) {
-  _enStartPct = parseInt(val);
-  document.getElementById('enSliderLabel').textContent = val + '%';
+function enSliderMove(v) { _enStartPct = parseInt(v); const p=document.getElementById('enPct'); if(p) p.textContent=v+'%'; }
+function enSliderSet(v)  {
+  _enStartPct = parseInt(v);
+  if (_enAudio) { _enAudio.currentTime = (_enDuration||0) * parseInt(v) / 100; }
+  else if (_enPlaying) { enStop(); enStart(); }
 }
-function enSliderChange(val) {
-  _enStartPct = parseInt(val);
-  if (_enAudio) {
-    // ElevenLabs: リアルタイムシーク
-    _enAudio.currentTime = (_enDuration||0) * parseInt(val) / 100;
-  } else if (_enPlaying) {
-    enStop(); enPlay();
-  }
-}
-function enSpeedChange(val) {
-  _enSpeed = parseFloat(val);
+function enSetSpeed(v)   {
+  _enSpeed = parseFloat(v);
   if (_enAudio) { _enAudio.playbackRate = _enSpeed; }
-  else if (_enPlaying) { enStop(); enPlay(); }
+  else if (_enPlaying) { enStop(); enStart(); }
 }
 
-// 全停止（画面遷移時）
-function stopSpeech() {
-  jaStop();
-  enStop();
-}
-// 旧互換
-function speakJa(text)           { _jaCurrentText = text; _jaStartPct = 0; jaPlay(); }
-async function playEnglish(text) { _enCurrentText = text; _enStartPct = 0; await enPlay(); }
+function stopSpeech() { jaStop(); enStop(); }
 
 // ══ END ══
 function renderEnd() {
   stopSpeech();
   document.getElementById('progFill').style.width = '100%';
-  document.getElementById('progNum').textContent = sessionItems.length + '/' + sessionItems.length;
-  const total = scores.correct + scores.wrong;
-  const pct = total > 0 ? Math.round(scores.correct / total * 100) : 0;
+  document.getElementById('progNum').textContent = sessionItems.length+'/'+sessionItems.length;
+  const total = scores.correct+scores.wrong;
+  const pct = total>0 ? Math.round(scores.correct/total*100) : 0;
   document.getElementById('screen').innerHTML = `
     <div class="card end-wrap">
       <h3>セッション完了！</h3>
       <p class="sub">${sessionItems.length}問のトレーニングお疲れ様でした</p>
       <div class="score-grid">
-        <div class="score-card">
-          <div class="score-num" style="color:var(--green)">${scores.correct}</div>
-          <div class="score-lbl">言えた</div>
-        </div>
-        <div class="score-card">
-          <div class="score-num" style="color:var(--red)">${scores.wrong}</div>
-          <div class="score-lbl">言えなかった</div>
-        </div>
-        <div class="score-card">
-          <div class="score-num">${pct}<span style="font-size:14px">%</span></div>
-          <div class="score-lbl">正答率</div>
-        </div>
+        <div class="score-card"><div class="score-num" style="color:var(--green)">${scores.correct}</div><div class="score-lbl">言えた</div></div>
+        <div class="score-card"><div class="score-num" style="color:var(--red)">${scores.wrong}</div><div class="score-lbl">言えなかった</div></div>
+        <div class="score-card"><div class="score-num">${pct}<span style="font-size:14px">%</span></div><div class="score-lbl">正答率</div></div>
       </div>
-      ${scores.skip > 0 ? `<p style="font-size:12px;color:var(--text3);margin-bottom:1.5rem">スキップ: ${scores.skip}問</p>` : ''}
+      ${scores.skip>0?`<p style="font-size:12px;color:var(--text3);margin-bottom:1.5rem">スキップ: ${scores.skip}問</p>`:''}
       <div class="end-btns">
         <button class="btn" onclick="backSetup()">← セットアップへ</button>
         <button class="btn btn-primary" onclick="restart()">もう一度</button>
       </div>
     </div>`;
 }
-
-function restart() {
-  idx = 0; scores = {correct:0, wrong:0, skip:0};
-  render();
-}
+function restart() { idx=0; scores={correct:0,wrong:0,skip:0}; render(); }
 function backSetup() {
   stopSpeech();
-  document.getElementById('appScreen').style.display = 'none';
-  document.getElementById('setupScreen').style.display = 'flex';
+  document.getElementById('appScreen').style.display='none';
+  document.getElementById('setupScreen').style.display='flex';
 }
 
 // ══ UTILS ══
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function escA(s) {
-  return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ').replace(/"/g,'&quot;');
-}
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 window.addEventListener('load', () => {
   const ek = getElKey();
-  if (ek) {
-    document.getElementById('elevenInput').value = ek;
-    document.getElementById('elevenStatus').textContent = '✓ 保存済み（ElevenLabs有効）';
-  }
+  if (ek) { document.getElementById('elevenInput').value=ek; document.getElementById('elevenStatus').textContent='✓ 保存済み（ElevenLabs有効）'; }
 });
 </script>
 </body>
