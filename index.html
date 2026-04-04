@@ -2,14 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-  <meta name="theme-color" content="#2563eb">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="ST Trainer">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon-192.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sight Translation Trainer</title>
 <style>
 :root {
@@ -123,6 +116,20 @@ select:focus { outline: none; border-color: var(--blue); }
 .tts-ja-btn { height: 34px; padding: 0 14px; font-size: 13px; gap: 5px; }
 .tts-ja-btn.playing { background: var(--blue-bg) !important; border-color: var(--blue-border) !important; color: var(--blue) !important; }
 .tts-note { font-size: 11px; color: var(--text3); }
+
+/* ── audio player ── */
+.audio-player { background: var(--surface2); border: 0.5px solid var(--border-mid); border-radius: var(--r-lg); padding: 10px 14px; margin-top: 12px; }
+.audio-player-row { display: flex; align-items: center; gap: 8px; }
+.play-stop-btn { height: 36px; padding: 0 14px; font-size: 13px; gap: 6px; flex-shrink: 0; }
+.play-stop-btn.playing { background: var(--red-bg) !important; border-color: var(--red-border) !important; color: var(--red) !important; }
+.slider-wrap { flex: 1; display: flex; align-items: center; gap: 6px; min-width: 0; }
+.slider-wrap input[type=range] { flex: 1; height: 4px; accent-color: var(--blue); cursor: pointer; }
+.slider-time { font-size: 11px; color: var(--text3); min-width: 28px; text-align: right; flex-shrink: 0; }
+.speed-select { height: 28px; font-size: 12px; padding: 0 4px; border: 0.5px solid var(--border-mid); border-radius: 5px; background: var(--surface); color: var(--text2); flex-shrink: 0; }
+.tts-controls { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.tts-ctrl-btn { height: 32px; padding: 0 11px; font-size: 12px; gap: 4px; color: var(--text2); }
+.tts-ctrl-btn:disabled { opacity: .3; cursor: not-allowed; }
+.tts-ctrl-btn.active { background: var(--blue-bg) !important; border-color: var(--blue-border) !important; color: var(--blue) !important; }
 
 /* ── 正解チャンク対比表示 ── */
 .chunk-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
@@ -411,7 +418,7 @@ function renderThink(item) {
       </button>
     </div>`;
 
-  setTimeout(() => speakJa(jaPlain), 350);
+  // 自動再生なし
 }
 
 // ══ PHASE 2: ANSWER ══
@@ -473,7 +480,9 @@ function showAnswer() {
       <button class="btn" onclick="render()">← もう一度見る</button>
     </div>`;
 
-  setTimeout(() => playEnglish(fullEn), 400);
+  // 自動再生なし - ユーザーが再生ボタンを押す
+  _enCurrentText = fullEn;
+  _enStartPct = 0;
 }
 
 // ══ JUDGE ══
@@ -498,62 +507,278 @@ function doSkip() {
   render();
 }
 
-// ══ TTS: Japanese ══
-function speakJa(text) {
+// ══ TTS ENGINE ══
+// Chrome の Web Speech API は pause/resume が壊れているため使用しない。
+// 「開始位置 = テキストの文字数 %」でサブストリング再生を実現する。
+
+let _jaCurrentText = '';
+let _jaStartPct    = 0;      // 0〜100 スライダー値
+let _jaPlaying     = false;
+let _jaUtt         = null;
+let _jaSpeed       = 1.0;
+
+let _enCurrentText = '';
+let _enStartPct    = 0;
+let _enPlaying     = false;
+let _enUtt         = null;
+let _enAudio       = null;   // ElevenLabs Audio
+let _enSpeed       = 1.0;
+let _enDuration    = 0;      // ElevenLabs 総再生時間(秒)
+
+const ICON_PLAY = '<svg width="11" height="11" viewBox="0 0 11 11"><polygon points="1,1 10,5.5 1,10" fill="currentColor"/></svg>';
+const ICON_STOP = '<svg width="11" height="11" viewBox="0 0 11 11"><rect x="2" y="1" width="3" height="9" rx="1" fill="currentColor"/><rect x="7" y="1" width="3" height="9" rx="1" fill="currentColor"/></svg>';
+
+// ─────────────────────────────────────────────
+// 日本語TTS
+// ─────────────────────────────────────────────
+function _jaSubText(pct) {
+  // pct=0 → 全文、pct=50 → 後半から
+  const text = _jaCurrentText;
+  if (pct <= 0) return text;
+  const startChar = Math.floor(text.length * pct / 100);
+  // スラッシュの直後まで進める（自然な区切りから再生）
+  const nextSlash = text.indexOf('/', startChar);
+  const start = (nextSlash > 0 && nextSlash < startChar + 20) ? nextSlash + 1 : startChar;
+  return text.slice(start).trim();
+}
+
+function jaToggle() {
+  if (_jaPlaying) { jaStop(); }
+  else            { jaPlay(); }
+}
+
+function jaPlay() {
+  const text = _jaSubText(_jaStartPct);
   if (!text) return;
-  stopSpeech();
+  jaStop();   // 既存をキャンセル
+  _jaPlaying = true;
+  _jaSetBtn(true);
+
   const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = 'ja-JP'; utt.rate = 0.9; utt.pitch = 1.0;
-  const btn = document.getElementById('ttsJaBtn');
-  utt.onstart = () => { if (btn) btn.classList.add('playing'); };
-  utt.onend = utt.onerror = () => { if (btn) btn.classList.remove('playing'); };
+  utt.lang = 'ja-JP';
+  utt.rate = _jaSpeed;
+  _jaUtt = utt;
+
+  let sliderTimer = null;
+  const totalLen = _jaCurrentText.length;
+  const startLen = Math.floor(totalLen * _jaStartPct / 100);
+  let charDone = startLen;
+
+  utt.onboundary = (e) => {
+    if (e.name !== 'word') return;
+    charDone = startLen + e.charIndex;
+    const pct = Math.min(100, Math.round(charDone / totalLen * 100));
+    _jaSetSlider(pct);
+  };
+  utt.onend = () => {
+    _jaPlaying = false;
+    _jaStartPct = 0;
+    _jaSetBtn(false);
+    _jaSetSlider(0);
+  };
+  utt.onerror = (e) => {
+    if (e.error === 'interrupted' || e.error === 'canceled') return; // 正常停止
+    _jaPlaying = false;
+    _jaSetBtn(false);
+  };
   window.speechSynthesis.speak(utt);
 }
 
-// ══ TTS: English ══
-async function playEnglish(text) {
-  if (!text) return;
-  stopSpeech();
-  const btn = document.getElementById('playEnBtn');
-  const elKey = getElKey();
+function jaStop() {
+  window.speechSynthesis.cancel();
+  _jaPlaying = false;
+  _jaUtt = null;
+  _jaSetBtn(false);
+}
 
+function _jaSetBtn(playing) {
+  const btn = document.getElementById('jaPlayBtn');
+  if (!btn) return;
+  if (playing) {
+    btn.innerHTML = ICON_STOP + ' 停止';
+    btn.classList.add('playing');
+  } else {
+    btn.innerHTML = ICON_PLAY + ' 再生';
+    btn.classList.remove('playing');
+  }
+}
+function _jaSetSlider(pct) {
+  const s = document.getElementById('jaSlider');
+  const l = document.getElementById('jaSliderLabel');
+  if (s) s.value = pct;
+  if (l) l.textContent = pct + '%';
+}
+function jaSliderInput(val) {
+  _jaStartPct = parseInt(val);
+  document.getElementById('jaSliderLabel').textContent = val + '%';
+}
+function jaSliderChange(val) {
+  _jaStartPct = parseInt(val);
+  if (_jaPlaying) { jaStop(); jaPlay(); }
+}
+function jaSpeedChange(val) {
+  _jaSpeed = parseFloat(val);
+  if (_jaPlaying) { jaStop(); jaPlay(); }
+}
+
+// ─────────────────────────────────────────────
+// 英語TTS
+// ─────────────────────────────────────────────
+function _enSubText(pct) {
+  const text = _enCurrentText;
+  if (pct <= 0) return text;
+  const startChar = Math.floor(text.length * pct / 100);
+  // スペースの手前まで巻き戻して単語境界から開始
+  let s = startChar;
+  while (s > 0 && text[s] !== ' ') s--;
+  return text.slice(s).trim();
+}
+
+function enToggle() {
+  if (_enPlaying) { enStop(); }
+  else            { enPlay(); }
+}
+
+async function enPlay() {
+  const text = _enSubText(_enStartPct);
+  if (!text) return;
+  enStop();
+  _enPlaying = true;
+  _enSetBtn(true);
+
+  const elKey = getElKey();
   if (elKey) {
-    setPlayingState(btn, true);
+    // ElevenLabs: Audio要素なので currentTime でシーク可能
     try {
       const res = await fetch('https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB', {
         method: 'POST',
         headers: { 'xi-api-key': elKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, model_id: 'eleven_turbo_v2_5',
+        body: JSON.stringify({ text: _enCurrentText, model_id: 'eleven_turbo_v2_5',
           voice_settings: { stability:.5, similarity_boost:.8, style:.3, use_speaker_boost:true } })
       });
       if (!res.ok) throw new Error(res.status);
       const url = URL.createObjectURL(await res.blob());
       const audio = new Audio(url);
-      audio.onended = () => { URL.revokeObjectURL(url); setPlayingState(btn, false); };
-      audio.play();
+      audio.playbackRate = _enSpeed;
+      _enAudio = audio;
+
+      audio.addEventListener('loadedmetadata', () => {
+        _enDuration = audio.duration;
+        // スタート位置をシーク
+        if (_enStartPct > 0) {
+          audio.currentTime = audio.duration * _enStartPct / 100;
+        }
+        audio.play();
+      });
+      audio.ontimeupdate = () => {
+        if (!_enDuration) return;
+        const pct = Math.min(100, Math.round(audio.currentTime / _enDuration * 100));
+        _enSetSlider(pct);
+      };
+      audio.onended = () => {
+        URL.revokeObjectURL(url);
+        _enAudio = null;
+        _enPlaying = false;
+        _enStartPct = 0;
+        _enSetBtn(false);
+        _enSetSlider(0);
+      };
+      audio.onerror = () => {
+        URL.revokeObjectURL(url);
+        _enAudio = null;
+        _enPlaying = false;
+        _enSetBtn(false);
+      };
       return;
-    } catch(err) { console.warn('ElevenLabs err:', err); setPlayingState(btn, false); }
+    } catch(err) {
+      console.warn('ElevenLabs err:', err);
+      _enAudio = null;
+      // fallthrough
+    }
   }
 
-  // Web Speech fallback
-  const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = 'en-US'; utt.rate = 0.88;
-  utt.onstart = () => setPlayingState(btn, true);
-  utt.onend = utt.onerror = () => setPlayingState(btn, false);
+  // Web Speech fallback（位置指定はサブテキストで近似）
+  const text2 = _enSubText(_enStartPct);
+  const utt = new SpeechSynthesisUtterance(text2);
+  utt.lang = 'en-US';
+  utt.rate = _enSpeed;
+  _enUtt = utt;
+
+  const totalLen = _enCurrentText.length;
+  const startLen = Math.floor(totalLen * _enStartPct / 100);
+
+  utt.onboundary = (e) => {
+    if (e.name !== 'word') return;
+    const charDone = startLen + e.charIndex;
+    const pct = Math.min(100, Math.round(charDone / totalLen * 100));
+    _enSetSlider(pct);
+  };
+  utt.onend = () => {
+    _enPlaying = false;
+    _enStartPct = 0;
+    _enSetBtn(false);
+    _enSetSlider(0);
+  };
+  utt.onerror = (e) => {
+    if (e.error === 'interrupted' || e.error === 'canceled') return;
+    _enPlaying = false;
+    _enSetBtn(false);
+  };
   window.speechSynthesis.speak(utt);
 }
 
-function setPlayingState(btn, playing) {
+function enStop() {
+  if (_enAudio) { _enAudio.pause(); _enStartPct = Math.round(_enAudio.currentTime / (_enDuration||1) * 100); _enAudio = null; }
+  window.speechSynthesis.cancel();
+  _enPlaying = false;
+  _enUtt = null;
+  _enSetBtn(false);
+}
+
+function _enSetBtn(playing) {
+  const btn = document.getElementById('enPlayBtn');
   if (!btn) return;
   if (playing) {
+    btn.innerHTML = ICON_STOP + ' 停止';
     btn.classList.add('playing');
-    btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 11 11"><rect x="1" y="1" width="3.5" height="9" fill="currentColor"/><rect x="6.5" y="1" width="3.5" height="9" fill="currentColor"/></svg> 再生中...`;
   } else {
+    btn.innerHTML = ICON_PLAY + ' ネイティブ発音';
     btn.classList.remove('playing');
-    btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 11 11"><polygon points="1,1 10,5.5 1,10" fill="currentColor"/></svg> ネイティブ発音で聞く`;
   }
 }
-function stopSpeech() { window.speechSynthesis.cancel(); }
+function _enSetSlider(pct) {
+  const s = document.getElementById('enSlider');
+  const l = document.getElementById('enSliderLabel');
+  if (s) s.value = pct;
+  if (l) l.textContent = pct + '%';
+}
+function enSliderInput(val) {
+  _enStartPct = parseInt(val);
+  document.getElementById('enSliderLabel').textContent = val + '%';
+}
+function enSliderChange(val) {
+  _enStartPct = parseInt(val);
+  if (_enAudio) {
+    // ElevenLabs: リアルタイムシーク
+    _enAudio.currentTime = (_enDuration||0) * parseInt(val) / 100;
+  } else if (_enPlaying) {
+    enStop(); enPlay();
+  }
+}
+function enSpeedChange(val) {
+  _enSpeed = parseFloat(val);
+  if (_enAudio) { _enAudio.playbackRate = _enSpeed; }
+  else if (_enPlaying) { enStop(); enPlay(); }
+}
+
+// 全停止（画面遷移時）
+function stopSpeech() {
+  jaStop();
+  enStop();
+}
+// 旧互換
+function speakJa(text)           { _jaCurrentText = text; _jaStartPct = 0; jaPlay(); }
+async function playEnglish(text) { _enCurrentText = text; _enStartPct = 0; await enPlay(); }
 
 // ══ END ══
 function renderEnd() {
@@ -613,15 +838,6 @@ window.addEventListener('load', () => {
     document.getElementById('elevenStatus').textContent = '✓ 保存済み（ElevenLabs有効）';
   }
 });
-</script>
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(r => console.log('SW registered'))
-      .catch(e => console.log('SW error:', e));
-  });
-}
 </script>
 </body>
 </html>
